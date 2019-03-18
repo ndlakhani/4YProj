@@ -38,9 +38,9 @@ def latticeMagnetisation(lattice):
     return magnetisation
 
 temppoints  = 100                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
-N           = 32                                                                                        # LATTICE LENGTH
-equilibrium = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
-montecarlo  = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
+N           = 16                                                                                        # LATTICE LENGTH
+equilibrium = 512                                                                                      # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+montecarlo  = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
@@ -56,9 +56,9 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 10                                                                                   # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 100                                                                                  # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
-for x in range(numberofconfigs):
+for i in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
         E1 = M1 = E2 = M2 = 0
         lattice = initstate(N)
@@ -67,7 +67,7 @@ for x in range(numberofconfigs):
         for x in range(equilibrium):                                                                    # EQUILIBRIATE
             metropolis(lattice, beta)                                  
 
-        for x in range(montecarlo):                                                                     # CALCULATE
+        for y in range(montecarlo):                                                                     # CALCULATE
             metropolis(lattice, beta)          
         
             Ene = latticeEnergy(lattice)                                          
@@ -84,8 +84,11 @@ for x in range(numberofconfigs):
         Mg = np.round(Mg1, 1)                                
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = np.round(T[tpoints],1)
-        TempList = np.concatenate((TempList, [temp])) 
+        TempList = np.concatenate((TempList, [temp]))
+        print("Recorded lattice configuration #", tpoints, " of ", temppoints)
 
+    print("Completed cycle #", i, "of ", numberofconfigs)
+    
 np.savetxt("configs.txt", LatticeList, fmt='%.2e')
 np.savetxt("maglabels.txt", MagList, fmt='%.2e')
 np.savetxt("templabels.txt", TempList, fmt='%.2e')
