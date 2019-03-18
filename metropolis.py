@@ -37,10 +37,10 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 10                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
-N           = 10                                                                                        # LATTICE LENGTH
-equilibrium = 50                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
-montecarlo  = 50                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
+temppoints  = 100                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
+N           = 32                                                                                        # LATTICE LENGTH
+equilibrium = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+montecarlo  = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
@@ -56,7 +56,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 1                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 200                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for x in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
