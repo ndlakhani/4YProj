@@ -33,3 +33,7 @@ def latticeEnergy(lattice):                                                     
             energy = E0
     return energy
 
+def latticeMagnetisation(lattice):
+    magnetisation = np.sum(lattice)
+    return magnetisation
+
