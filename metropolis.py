@@ -37,7 +37,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 50                                                                                        # NUMBER OF POINTS IN TEMPERATURE RANGE
+temppoints  = 100                                                                                        # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        # LATTICE LENGTH
 equilibrium = 1024                                                                                      # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
 montecarlo  = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
@@ -56,30 +56,33 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-for tpoints in range(temppoints):                                                                       # MAIN CODE BLOCK
-    E1 = M1 = E2 = M2 = 0
-    lattice = initstate(N)
-    beta =1.0/T[tpoints]
+numberofconfigs = 200                                                                                   # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+
+for x in range(numberofconfigs):
+    for tpoints in range(temppoints):                                                                       # MAIN CODE BLOCK
+        E1 = M1 = E2 = M2 = 0
+        lattice = initstate(N)
+        beta =1.0/T[tpoints]
     
-    for x in range(equilibrium):                                                                        # EQUILIBRIATE
-        metropolis(lattice, beta)                                  
+        for x in range(equilibrium):                                                                        # EQUILIBRIATE
+            metropolis(lattice, beta)                                  
 
-    for x in range(montecarlo):                                                                         # CALCULATE
-        metropolis(lattice, beta)          
+        for x in range(montecarlo):                                                                         # CALCULATE
+            metropolis(lattice, beta)          
         
-        Ene = latticeEnergy(lattice)                                          
-        Mag = latticeMagnetisation(lattice)                                                         
+            Ene = latticeEnergy(lattice)                                          
+            Mag = latticeMagnetisation(lattice)                                                         
 
-        E1 = E1 + Ene
-        M1 = M1 + Mag
-        M2 = M2 + Mag*Mag 
-        E2 = E2 + Ene*Ene
+            E1 = E1 + Ene
+            M1 = M1 + Mag
+            M2 = M2 + Mag*Mag 
+            E2 = E2 + Ene*Ene
+                       
         flatlattice = np.ravel(lattice)                                                                 # SAVE LATTICE TO NUMPY ARRAY
         LatticeList = np.concatenate((LatticeList, [flatlattice]))          
         Mg1 = abs(n1*M1)
         Mg = np.round(Mg1, 1)                                
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = np.round(T[tpoints],1)
-        TempList = np.concatenate((TempList, [temp]))                
-
+        TempList = np.concatenate((TempList, [temp])) 
 
