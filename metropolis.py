@@ -37,10 +37,10 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 100                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
+temppoints  = 10                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 10                                                                                        # LATTICE LENGTH
-equilibrium = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
-montecarlo  = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
+equilibrium = 50                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+montecarlo  = 50                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
@@ -56,7 +56,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 100                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 1                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for x in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
@@ -86,6 +86,6 @@ for x in range(numberofconfigs):
         temp = np.round(T[tpoints],1)
         TempList = np.concatenate((TempList, [temp])) 
 
-np.savetxt("configs_%ix%i.txt"%(N, N), LatticeList, fmt='%.2e')
-np.savetxt("maglabels_%ix%i.txt"%(N, N), MagList, fmt='%.2e')
-np.savetxt("templabels_%ix%i.txt"%(N, N), TempList, fmt='%.2e')
+np.savetxt("configs.txt", LatticeList, fmt='%.2e')
+np.savetxt("maglabels.txt", MagList, fmt='%.2e')
+np.savetxt("templabels.txt", TempList, fmt='%.2e')
