@@ -37,9 +37,9 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 100                                                                                        # NUMBER OF POINTS IN TEMPERATURE RANGE
+temppoints  = 100                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 10                                                                                        # LATTICE LENGTH
-equilibrium = 512                                                                                      # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+equilibrium = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
 montecarlo  = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)
 E           = np.zeros(temppoints)
@@ -56,18 +56,18 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 10                                                                                   # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 10                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for x in range(numberofconfigs):
-    for tpoints in range(temppoints):                                                                       # MAIN CODE BLOCK
+    for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
         E1 = M1 = E2 = M2 = 0
         lattice = initstate(N)
         beta =1.0/T[tpoints]
     
-        for x in range(equilibrium):                                                                        # EQUILIBRIATE
+        for x in range(equilibrium):                                                                    # EQUILIBRIATE
             metropolis(lattice, beta)                                  
 
-        for x in range(montecarlo):                                                                         # CALCULATE
+        for x in range(montecarlo):                                                                     # CALCULATE
             metropolis(lattice, beta)          
         
             Ene = latticeEnergy(lattice)                                          
