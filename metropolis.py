@@ -56,7 +56,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 10                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 100                                                                                    # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for x in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
@@ -86,3 +86,6 @@ for x in range(numberofconfigs):
         temp = np.round(T[tpoints],1)
         TempList = np.concatenate((TempList, [temp])) 
 
+np.savetxt("configs_%ix%i.txt"%(N, N, LatticeList, fmt='%.2e'))
+np.savetxt("maglabels_%ix%i.txt"%(N, N, MagList, fmt='%.2e'))
+np.savetxt("templabels_%ix%i.txt"%(N, N, TempList, fmt='%.2e'))
