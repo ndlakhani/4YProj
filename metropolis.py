@@ -12,7 +12,7 @@ def metropolis(lattice, beta):                                                  
         for b in range(N):
             x = np.random.randint(0,N)                                                                  # SELECT LATTICE POINT X-COORDINATE
             y = np.random.randint(0,N)                                                                  # SELECT LATTICE POINT Y-COORDINATE
-            z = lattice(x, y)                                                                           # DEFINE LATTICE POINT VALUE
+            z = lattice[x, y]                                                                           # DEFINE LATTICE POINT VALUE
             z1 = lattice[(x+1)%N,y] + lattice[x,(y+1)%N] + lattice[(x-1)%N,y] + lattice[x,(y-1)%N]      
             prob = 2*z*z1                                                                               # CALCULATE ENERGY CHANGE (dE)
             if prob < 0:                                
