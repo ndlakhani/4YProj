@@ -88,6 +88,6 @@ for i in range(numberofconfigs):
         print("Recorded lattice configuration #", tpoints, " of ", temppoints, " in cycle #", i, " of ", numberofconfigs)
 
 
-np.savetxt("testconfigs.txt", LatticeList, fmt='%.2e')
-np.savetxt("testmaglabels.txt", MagList, fmt='%.2e')
-np.savetxt("testtemplabels.txt", TempList, fmt='%.2e')
+np.savetxt("testconfigs1.txt", LatticeList, fmt='%.2e')
+np.savetxt("testmaglabels1.txt", MagList, fmt='%.2e')
+np.savetxt("testtemplabels1.txt", TempList, fmt='%.2e')
