@@ -85,10 +85,9 @@ for i in range(numberofconfigs):
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = np.round(T[tpoints],1)
         TempList = np.concatenate((TempList, [temp]))
-        print("Recorded lattice configuration #", tpoints, " of ", temppoints)
+        print("Recorded lattice configuration #", tpoints, " of ", temppoints, " in cycle #", i, " of ", numberofconfigs)
 
-    print("Completed cycle #", i, "of ", numberofconfigs)
-    
+
 np.savetxt("configs.txt", LatticeList, fmt='%.2e')
 np.savetxt("maglabels.txt", MagList, fmt='%.2e')
 np.savetxt("templabels.txt", TempList, fmt='%.2e')
