@@ -7,4 +7,20 @@ def initstate(N):                                                               
     return init
 
 
+def metropolis(lattice, beta):                                                                          # MONTE CARLO VIA METROPOLIS
+    for a in range(N):
+        for b in range(N):
+            x = np.random.randint(0,N)                                                                  # SELECT LATTICE POINT X-COORDINATE
+            y = np.random.randint(0,N)                                                                  # SELECT LATTICE POINT Y-COORDINATE
+            z = lattice(x, y)                                                                           # DEFINE LATTICE POINT VALUE
+            z1 = lattice[(x+1)%N,y] + lattice[x,(y+1)%N] + lattice[(x-1)%N,y] + lattice[x,(y-1)%N]      
+            prob = 2*z*z1                                                                               # CALCULATE ENERGY CHANGE (dE)
+            if prob < 0:                                
+                z *= -1                                                                                 # ACCEPT FLIP IF dE < 0
+            elif rand() < np.exp(-prob*beta):
+                z *= -1                                                                                 # ACCEPT FLIP WITH PROBABILITY OF e^(=dE/T)
+            lattice[x,y] = z                                                                            # ASSIGN NEW LATTICE POINT VALUE (either 1 or -1)
+    return lattice
+
+
 
