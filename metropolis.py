@@ -6,7 +6,6 @@ def initstate(N):                                                               
     init = 2*np.random.randint(2, size=(N,N))-1                                                         # GENERATES ARRAY OF SIZE N BY N OF 1s and -1s
     return init
 
-
 def metropolis(lattice, beta):                                                                          # MONTE CARLO VIA METROPOLIS
     for a in range(N):
         for b in range(N):
@@ -33,14 +32,15 @@ def latticeEnergy(lattice):                                                     
             energy = E0
     return energy
 
+
 def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
 temppoints  = 100                                                                                       # NUMBER OF POINTS IN TEMPERATURE RANGE
-N           = 16                                                                                        # LATTICE LENGTH
-equilibrium = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
-montecarlo  = 512                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
+N           = 32                                                                                        # LATTICE LENGTH
+equilibrium = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+montecarlo  = 1024                                                                                       # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
@@ -56,7 +56,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 100                                                                                   # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 10                                                                                   # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for x in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   # MAIN CODE BLOCK
