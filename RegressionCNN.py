@@ -32,31 +32,29 @@ print("Loaded 2D Ising Lattice configurations for testing")
 
 
 x = train_dataset
-y = label
+y_train = label/3.6
 
 test_x = test_dataset
-test_y = tlabels
+y_test = tlabels/3.6
 
 # PREPARING DATA: RESHAPE LATTICE TO N*N*1, COVERT LABELS TO CATEGORICAL
 
 latticeshape = (N, N, 1)
 x_train = x.reshape(x.shape[0], N, N, 1)
 x_test = test_x.reshape(test_x.shape[0],N,N,1)
-y_train = y
-y_test = test_y
 
 # CREATE MODEL
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(256, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
 
 # DROPOUT AND FLATTEN
 
 model.add(Flatten())
 
 # DENSE LAYERS
-model.add(Dense(64, activation='relu'))
+model.add(Dense(256, activation='relu'))
 model.add(Dense(64, activation='relu'))
 
 # OUTPUT LOGIT LAYER
@@ -69,12 +67,12 @@ model.summary()
 model.compile(loss='mean_absolute_error', optimizer="sgd", metrics=['mean_absolute_error'])
 
 # TRAIN MODEL
-history = model.fit(x_train, y_train, batch_size=100, epochs=10, verbose=1, validation_data=(x_test, y_test))
+history = model.fit(x_train, y_train, batch_size=100, epochs=25, verbose=1, validation_data=(x_test, y_test))
 
 score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+print('Test error:', score[1])
 
 xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)

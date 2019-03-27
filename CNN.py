@@ -76,7 +76,7 @@ model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy']
 # TRAIN MODEL
 history = model.fit(x_train, y_train,
                     batch_size=50,
-                    epochs=50,
+                    epochs=5,
                     verbose=1,
                     shuffle=True,
                     validation_data=(x_test, y_test))
@@ -87,7 +87,8 @@ print('Test accuracy:', score[1])
 xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 
-ypredict = model.predict_classes(xpred)
+ypred = model.predict_classes(xpred)
+y_predictions = ypred/10
 
 truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = np.round(truelabels*10)
+ylabels = np.round(truelabels)
