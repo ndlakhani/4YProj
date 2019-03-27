@@ -71,7 +71,7 @@ history = model.fit(x_train, y_train, batch_size=100, epochs=25, verbose=1, vali
 
 score = model.evaluate(x_test, y_test, verbose=0)
 
-print('Test error:', score[0]*100, '%')
+print('Test error:', score[0])
 
 xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
