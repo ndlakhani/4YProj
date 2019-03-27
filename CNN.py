@@ -71,9 +71,7 @@ model.add(Dense(36, activation='softmax'))
 model.summary()
 
 # COMPILE MODEL
-model.compile(loss='binary_crossentropy',
-              optimizer="adam",
-              metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
 
 # TRAIN MODEL
 history = model.fit(x_train, y_train,
