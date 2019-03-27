@@ -50,7 +50,7 @@ model = Sequential()
 
 # CONVOLUTION LAYERS
 model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
-model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
+
 # DROPOUT AND FLATTEN
 
 model.add(Flatten())
