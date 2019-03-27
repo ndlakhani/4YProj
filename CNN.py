@@ -75,8 +75,8 @@ model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy']
 
 # TRAIN MODEL
 history = model.fit(x_train, y_train,
-                    batch_size=100,
-                    epochs=20,
+                    batch_size=50,
+                    epochs=50,
                     verbose=1,
                     shuffle=True,
                     validation_data=(x_test, y_test))
