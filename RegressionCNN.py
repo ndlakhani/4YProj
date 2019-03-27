@@ -50,7 +50,7 @@ model = Sequential()
 
 # CONVOLUTION LAYERS
 model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
-
+model.add(Conv2D(64, kernel_size=(2, 2), activation='relu'))
 # DROPOUT AND FLATTEN
 
 model.add(Flatten())
@@ -79,7 +79,7 @@ print('Test accuracy:', score[1])
 xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 
-ypredict = model.predict_classes(xpred)
+ypredict = model.predict(xpred)
 
 truelabels = np.array(np.load("predictlabels.npy"))
 ylabels = truelabels/3.6
