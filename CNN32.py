@@ -94,7 +94,14 @@ xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 
 ypred = model.predict_classes(xpred)
-y_predictions = ypred/10
+ypredict = ypred/10
 
 truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = np.round(truelabels)
+ylabels = truelabels
+
+yerror = np.abs(ypredict-ylabels)
+
+order = np.abs(np.sum([xpredict], axis=2))
+order = order.reshape(order.shape[1],)
+order = order/1024
+plt.plot(ypredict,order,'x')

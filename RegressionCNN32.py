@@ -93,4 +93,7 @@ ylabels = truelabels/3.5
 
 yerror = np.abs(ypredict-ylabels)
 
-plt.plot(ylabels, yerror, 'x')
+order = np.abs(np.sum([xpredict], axis=2))
+order = order.reshape(order.shape[1],)
+order = order/1024
+plt.plot(ypredict,order,'x')

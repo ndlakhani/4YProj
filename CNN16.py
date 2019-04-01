@@ -98,3 +98,8 @@ y_predictions = ypred/10
 
 truelabels = np.array(np.load("predictlabels.npy"))
 ylabels = np.round(truelabels)
+
+order = np.abs(np.sum([xpredict], axis=2))
+order = order.reshape(order.shape[1],)
+order = order/1024
+plt.plot(ypredict,order,'x')
