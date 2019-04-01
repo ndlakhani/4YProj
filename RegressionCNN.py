@@ -47,17 +47,17 @@ x_test = test_x.reshape(test_x.shape[0],N,N,1)
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(256, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
 
 # DROPOUT AND FLATTEN
 
 model.add(Flatten())
 
 # DENSE LAYERS
-model.add(Dense(256, activation='relu'))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(16, activation='relu'))
 
-# OUTPUT LOGIT LAYER
+# OUTPUT LAYER
 model.add(Dense(1, activation='linear'))
 
 # DISPLAY NETWORK ARCHITECTURE
@@ -80,4 +80,3 @@ ypredict = model.predict(xpred)
 
 truelabels = np.array(np.load("predictlabels.npy"))
 ylabels = truelabels/3.6
-
