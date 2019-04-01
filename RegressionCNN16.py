@@ -69,6 +69,16 @@ model.compile(loss='mean_absolute_error', optimizer="sgd", metrics=['mean_absolu
 # TRAIN MODEL
 history = model.fit(x_train, y_train, batch_size=100, epochs=25, verbose=1, validation_data=(x_test, y_test))
 
+print(history.history.keys())
+# "Loss"
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'validation'], loc='upper left')
+plt.show()
+
 score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test error:', score[0])
