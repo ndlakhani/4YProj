@@ -4,9 +4,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-from keras.utils import to_categorical
-from keras import regularizers
+from keras.layers import Dense, Flatten, Conv2D
+
 
 
 # SIZE OF SYSTEM
