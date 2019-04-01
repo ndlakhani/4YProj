@@ -32,10 +32,10 @@ print("Loaded 2D Ising Lattice configurations for testing")
 
 
 x = train_dataset
-y_train = label/3.6
+y_train = label/3.5
 
 test_x = test_dataset
-y_test = tlabels/3.6
+y_test = tlabels/3.5
 
 # PREPARING DATA: RESHAPE LATTICE TO N*N*1, COVERT LABELS TO CATEGORICAL
 
@@ -89,4 +89,4 @@ xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 ypredict = model.predict(xpred)
 
 truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = truelabels/3.6
+ylabels = truelabels/3.5
