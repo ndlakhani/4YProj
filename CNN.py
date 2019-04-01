@@ -61,7 +61,7 @@ model.add(Flatten())
 # DENSE LAYERS
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.3))
-model.add(Dense(16, activation='relu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.1))
 
 # OUTPUT LOGIT LAYER
@@ -80,6 +80,8 @@ history = model.fit(x_train, y_train,
                     verbose=1,
                     shuffle=True,
                     validation_data=(x_test, y_test))
+
+
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
