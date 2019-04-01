@@ -48,8 +48,8 @@ y_test = keras.utils.to_categorical(test_y)
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
-model.add(Conv2D(32, (2, 2), activation='relu'))
+model.add(Conv2D(32, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(64, (2, 2), activation='relu'))
 
 # MAX POOL LAYER
 model.add(MaxPooling2D(pool_size=(2, 2)))
