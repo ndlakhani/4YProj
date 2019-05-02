@@ -1,13 +1,20 @@
 from __future__ import division
 import numpy as np
 from numpy.random import rand
+import numba
+from numba import jit, autojit, vectorize, double
 
+# MAGNETIC FIELD - SET H TO 0 FOR NO MAGNETIC FIELD
+h = 0.5
+
+@jit
 def initstate(N):                                                                                       
     # GENERATE INITIAL SPINS
     init = 2*np.random.randint(2, size=(N,N))-1                                                         
     # GENERATES ARRAY OF SIZE N BY N OF 1s and -1s
     return init
 
+@jit
 def metropolis(lattice, beta):                                                                          
     # MONTE CARLO VIA METROPOLIS
     for a in range(N):
@@ -18,8 +25,9 @@ def metropolis(lattice, beta):
             # SELECT LATTICE POINT Y-COORDINATE
             z = lattice[x, y]                                                                           
             # DEFINE LATTICE POINT VALUE
-            z1 = lattice[(x+1)%N,y] + lattice[x,(y+1)%N] + lattice[(x-1)%N,y] + lattice[x,(y-1)%N]      
-            prob = 2*z*z1                                                                               
+            z1 = lattice[(x+1)%N,y] + lattice[x,(y+1)%N] + lattice[(x-1)%N,y] + lattice[x,(y-1)%N]
+            H = np.sum([lattice])*h      
+            prob = 2*((z*z1)+H)                                                                              
             # CALCULATE ENERGY CHANGE (dE)
             if prob < 0:                                
                 z *= -1                                                                                 
@@ -31,6 +39,7 @@ def metropolis(lattice, beta):
             # ASSIGN NEW LATTICE POINT VALUE (either 1 or -1)
     return lattice
 
+@jit
 def latticeEnergy(lattice):                                                                             
     # CALCULATE ENERGY OF LATTICE CONFIGURATION
     E1 = 0
@@ -38,18 +47,19 @@ def latticeEnergy(lattice):
          # CALCULATE OVER ENTIRE LATTICE - ALL LATTICE POINTS
         for y in range(len(lattice)):                                                                   
             Z = lattice[x,y]
-            Z1 = lattice[(x+1)%N, y] + lattice[x,(y+1)%N] + lattice[(x-1)%N, y] + lattice[x,(y-1)%N]      
-            E1 += -Z1*Z
+            Z1 = lattice[(x+1)%N, y] + lattice[x,(y+1)%N] + lattice[(x-1)%N, y] + lattice[x,(y-1)%N]
+            H1 = np.sum([lattice])*h      
+            E1 += -Z1*Z - H1
             E0 = E1/4.                                                                                  
             energy = E0
     return energy
 
-
+@jit
 def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 100                                                                                       
+temppoints  = 10                                                                                       
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH
@@ -72,7 +82,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 400                                                                                  
+numberofconfigs = 10                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for i in range(numberofconfigs):
