@@ -1,0 +1,15 @@
+
+metropolisPotts.txt
+32x32data/latticelist.npy
+32x32data/predictdata.npy
+32x32data/predictlabels.npy
+32x32data/templist.npy
+32x32data/testconfigs.npy
+32x32data/testtemplabels.npy
+latticelist.npy
+notes.txt
+predictdata.npy
+predictlabels.npy
+templist.npy
+testconfigs.npy
+testtemplabels.npy
