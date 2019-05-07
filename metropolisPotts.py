@@ -79,7 +79,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 10                                                                                       
+temppoints  = 400                                                                                       
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH
@@ -102,7 +102,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 10                                                                                  
+numberofconfigs = 100                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for i in range(numberofconfigs):
