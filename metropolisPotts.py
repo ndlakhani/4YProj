@@ -4,14 +4,32 @@ from numpy.random import rand
 import numba
 from numba import jit, autojit, vectorize, double
 
-# MAGNETIC FIELD - SET H TO 0 FOR NO MAGNETIC FIELD
-h = 0.5
+# q states Potts model - select number of states
+q = 3
+qstates = np.arange(q)+1
+allowedstates = np.exp((2*qstates*(np.pi)*1j)/q)
 
+@jit
+def kroenecker(x1, x2):
+    if (x1 == x2):
+        return 1
+    else:
+        return 0
+
+@jit
+def roll(z):
+    z_new = z
+    while z == z_new:
+        z_new = np.exp((2*(np.random.randint(q)+1)*(np.pi)*1j)/q)
+    return z_new
+
+    
 @jit
 def initstate(N):                                                                                       
     # GENERATE INITIAL SPINS
-    init = 2*np.random.randint(2, size=(N,N))-1                                                         
-    # GENERATES ARRAY OF SIZE N BY N OF 1s and -1s
+    init1 = np.random.randint(3, size=(N,N))+1
+    init = np.exp((2*init1*(np.pi)*1j)/q)                                                         
+    # GENERATES ARRAY OF SIZE N BY N OF Q STATES
     return init
 
 @jit
@@ -23,20 +41,23 @@ def metropolis(lattice, beta):
             # SELECT LATTICE POINT X-COORDINATE
             y = np.random.randint(0,N)                                                                  
             # SELECT LATTICE POINT Y-COORDINATE
-            z = lattice[x, y]                                                                           
-            # DEFINE LATTICE POINT VALUE
-            z1 = lattice[(x+1)%N,y] + lattice[x,(y+1)%N] + lattice[(x-1)%N,y] + lattice[x,(y-1)%N]
-            H = np.sum([lattice])*h      
-            prob = 2*((z*z1)+H)                                                                              
+            z = lattice[x, y]
+            z_new = roll(z)
+                                                                                       
+            # GET OLD AND NEW Z VAL
+            
+            ESumBefore  = -(kroenecker(z,lattice[(x+1)%N,y]) + kroenecker(z,lattice[x,(y+1)%N]) + kroenecker(z,lattice[(x-1)%N,y]) + kroenecker(z,lattice[x,(y-1)%N]))
+            ESumAfter   = -(kroenecker(z_new,lattice[(x+1)%N,y]) + kroenecker(z_new,lattice[x,(y+1)%N]) + kroenecker(z_new,lattice[(x-1)%N,y]) + kroenecker(z_new,lattice[x,(y-1)%N]))     
+            dE = ESumAfter - ESumBefore                                                                             
             # CALCULATE ENERGY CHANGE (dE)
-            if prob < 0:                                
-                z *= -1                                                                                 
+            if dE < 0:                                
+                z = z_new                                                                                 
                 # ACCEPT FLIP IF dE < 0
-            elif rand() < np.exp(-prob*beta):
-                z *= -1                                                                                 
+            elif rand() < np.exp(-dE*beta):
+                z = z_new                                                                                 
                 # ACCEPT FLIP WITH PROBABILITY OF e^(=dE/T)
             lattice[x,y] = z                                                                            
-            # ASSIGN NEW LATTICE POINT VALUE (either 1 or -1)
+            # ASSIGN NEW LATTICE POINT VALUE
     return lattice
 
 @jit
@@ -48,10 +69,9 @@ def latticeEnergy(lattice):
         for y in range(len(lattice)):                                                                   
             Z = lattice[x,y]
             Z1 = lattice[(x+1)%N, y] + lattice[x,(y+1)%N] + lattice[(x-1)%N, y] + lattice[x,(y-1)%N]
-            H1 = np.sum([lattice])*h      
-            E1 += -Z1*Z - H1
-            E0 = E1/4.                                                                                  
-            energy = E0
+            Zkro = kroenecker(Z,lattice[(x+1)%N, y]) + kroenecker(Z,lattice[x,(y+1)%N]) + kroenecker(Z,lattice[(x-1)%N, y]) + kroenecker(Z,lattice[x,(y-1)%N])    
+            E1 += -Z1*Z 
+            energy = E1/4.                                                                                             
     return energy
 
 @jit

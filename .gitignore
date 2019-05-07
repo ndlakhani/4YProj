@@ -13,3 +13,4 @@ predictlabels.npy
 templist.npy
 testconfigs.npy
 testtemplabels.npy
+roll.py
