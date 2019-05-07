@@ -14,3 +14,6 @@ templist.npy
 testconfigs.npy
 testtemplabels.npy
 roll.py
+templabels.npy
+maglabels.npy
+configs.npy

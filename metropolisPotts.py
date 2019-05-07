@@ -70,8 +70,8 @@ def latticeEnergy(lattice):
             Z = lattice[x,y]
             Z1 = lattice[(x+1)%N, y] + lattice[x,(y+1)%N] + lattice[(x-1)%N, y] + lattice[x,(y-1)%N]
             Zkro = kroenecker(Z,lattice[(x+1)%N, y]) + kroenecker(Z,lattice[x,(y+1)%N]) + kroenecker(Z,lattice[(x-1)%N, y]) + kroenecker(Z,lattice[x,(y-1)%N])    
-            E1 += -Z1*Z 
-            energy = E1/4.                                                                                             
+            E1 += -Zkro*Z 
+            energy = E1                                                                                             
     return energy
 
 @jit
@@ -87,7 +87,7 @@ equilibrium = 1024
 # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
 montecarlo  = 1024                                                                                      
 # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
-T           = np.linspace(1.50, 3.50, temppoints)
+T           = np.linspace(1.50, 3.50, temppoints)/2
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
 C           = np.zeros(temppoints)
@@ -137,7 +137,7 @@ for i in range(numberofconfigs):
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = np.round(T[tpoints],1)
         TempList = np.concatenate((TempList, [temp]))
-        print("Recorded lattice configuration #", tpoints, " of ", temppoints, " in cycle #", i, " of ", numberofconfigs)
+        print("Recorded lattice configuration #", tpoints+1, " of ", temppoints, " in cycle #", i+1, " of ", numberofconfigs)
 
 
 np.save("configs.npy", LatticeList)
