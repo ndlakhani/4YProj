@@ -131,9 +131,8 @@ for i in range(numberofconfigs):
         flatlattice = np.ravel(lattice)                                                                 
         # SAVE LATTICE TO NUMPY ARRAY
         
-        LatticeList = np.concatenate((LatticeList, [flatlattice]))          
-        Mg1 = abs(n1*M1)
-        Mg = np.round(Mg1, 1)                                
+        LatticeList = np.concatenate((LatticeList, [flatlattice]))                  
+        Mg = M1*n1                                
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = np.round(T[tpoints],1)
         TempList = np.concatenate((TempList, [temp]))
