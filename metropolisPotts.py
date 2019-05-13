@@ -90,11 +90,8 @@ montecarlo  = 1024
 T           = np.linspace(1.50, 3.50, temppoints)/2
 E           = np.zeros(temppoints)
 M           = np.zeros(temppoints)
-C           = np.zeros(temppoints)
-X           = np.zeros(temppoints)
 
 n1          = 1.0/(montecarlo*N*N)
-n2          = 1.0/(montecarlo*montecarlo*N*N) 
 
 lattice = initstate(N)
 flatlattice = np.ravel(lattice)
@@ -120,13 +117,11 @@ for i in range(numberofconfigs):
             # CALCULATE
             metropolis(lattice, beta)          
         
-            Ene = latticeEnergy(lattice)                                          
+            Energy = latticeEnergy(lattice)                                          
             Mag = latticeMagnetisation(lattice)                                                         
 
-            E1 = E1 + Ene
-            M1 = M1 + Mag
-            M2 = M2 + Mag*Mag 
-            E2 = E2 + Ene*Ene
+            E1 = E1 + Energy
+            M1 = M1 + Mag           
                        
         flatlattice = np.ravel(lattice)                                                                 
         # SAVE LATTICE TO NUMPY ARRAY
