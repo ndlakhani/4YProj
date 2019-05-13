@@ -58,23 +58,17 @@ def latticeEnergy(lattice):
 def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
-
-temppoints  = 10                                                                                       
 # NUMBER OF POINTS IN TEMPERATURE RANGE
-N           = 32                                                                                        
+temppoints  = 10                                                                                       
 # LATTICE LENGTH
+N           = 32                                                                                        
+# NUMBER OF METROPOLIS RUNS FOR EQUILIBRIATION
 equilibrium = 1024                                                                                      
-# NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
+# NUMBER OF METROPOLIS RUNS FOR CALCULATIONS
 montecarlo  = 1024                                                                                      
-# NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
-T           = np.linspace(1.50, 3.50, temppoints)
-E           = np.zeros(temppoints)
-M           = np.zeros(temppoints)
-C           = np.zeros(temppoints)
-X           = np.zeros(temppoints)
 
+T           = np.linspace(1.50, 3.50, temppoints)
 n1          = 1.0/(montecarlo*N*N)
-n2          = 1.0/(montecarlo*montecarlo*N*N) 
 
 lattice = initstate(N)
 flatlattice = np.ravel(lattice)
@@ -82,13 +76,14 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 10                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
+numberofconfigs = 10                                                                                  
+
 
 for i in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   
         # MAIN CODE BLOCK
-        E1 = M1 = E2 = M2 = 0
+        E = M = 0
         lattice = initstate(N)
         beta =1.0/T[tpoints]
     
@@ -100,22 +95,20 @@ for i in range(numberofconfigs):
             # CALCULATE
             metropolis(lattice, beta)          
         
-            Ene = latticeEnergy(lattice)                                          
+            Energy = latticeEnergy(lattice)                                          
             Mag = latticeMagnetisation(lattice)                                                         
 
-            E1 = E1 + Ene
-            M1 = M1 + Mag
-            M2 = M2 + Mag*Mag 
-            E2 = E2 + Ene*Ene
+            E = E + Energy
+            M = M + Mag          
                        
         flatlattice = np.ravel(lattice)                                                                 
-        # SAVE LATTICE TO NUMPY ARRAY
         
-        LatticeList = np.concatenate((LatticeList, [flatlattice]))          
-        Mg1 = abs(n1*M1)
-        Mg = np.round(Mg1, 1)                                
+        # SAVE LATTICE TO NUMPY ARRAY       
+        LatticeList = np.concatenate((LatticeList, [flatlattice])) 
+         
+        Mg = abs(n*M)                                       
         MagList = np.concatenate((MagList, [Mg]))                   
-        temp = np.round(T[tpoints],1)
+        temp = T[tpoints]
         TempList = np.concatenate((TempList, [temp]))
         print("Recorded lattice configuration #", tpoints, " of ", temppoints, " in cycle #", i, " of ", numberofconfigs)
 

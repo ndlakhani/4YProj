@@ -9,7 +9,9 @@ from keras.layers import Dense, Flatten, Conv2D
 
 # SIZE OF SYSTEM
 N = 32                                                                      
-
+MCStepE, MCStepM = 1024
+n = 1.0/(N*MCStepM*MCStepM)
+n2 = 1.0/(N*N*MCStepM*MCStepM)
 
 # LOAD LATTICE CONFIGURATIONS
 train_dataset = np.load("latticelist.npy")
@@ -96,3 +98,4 @@ order = np.abs(np.sum([xpredict], axis=2))
 order = order.reshape(order.shape[1],)
 order = order/1024
 plt.plot(ypredict,order,'x')
+

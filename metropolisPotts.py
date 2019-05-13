@@ -4,10 +4,8 @@ from numpy.random import rand
 import numba
 from numba import jit, autojit, vectorize, double
 
-# q states Potts model - select number of states
+# Q STATES POTTS MODEL - SELECT # OF STATES
 q = 3
-qstates = np.arange(q)+1
-allowedstates = np.exp((2*qstates*(np.pi)*1j)/q)
 
 @jit
 def kroenecker(x1, x2):
@@ -79,7 +77,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 1000                                                                                       
+temppoints  = 100                                                                                      
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH
@@ -88,16 +86,15 @@ equilibrium = 1024
 montecarlo  = 1024                                                                                      
 # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
 T           = np.linspace(1.50, 3.50, temppoints)/2
-E           = np.zeros(temppoints)
-M           = np.zeros(temppoints)
 
-n1          = 1.0/(montecarlo*N*N)
+n          = 1.0/(montecarlo*N*N)
 
 lattice = initstate(N)
 flatlattice = np.ravel(lattice)
 LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
+Order = [0]
 
 numberofconfigs = 1                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
@@ -105,7 +102,7 @@ numberofconfigs = 1
 for i in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   
         # MAIN CODE BLOCK
-        E1 = M1 = E2 = M2 = 0
+        E = M = 0
         lattice = initstate(N)
         beta =1.0/T[tpoints]
     
@@ -120,14 +117,20 @@ for i in range(numberofconfigs):
             Energy = latticeEnergy(lattice)                                          
             Mag = latticeMagnetisation(lattice)                                                         
 
-            E1 = E1 + Energy
-            M1 = M1 + Mag           
+            E = E + Energy
+            M = M + Mag           
                        
         flatlattice = np.ravel(lattice)                                                                 
         # SAVE LATTICE TO NUMPY ARRAY
         
-        LatticeList = np.concatenate((LatticeList, [flatlattice]))                  
-        Mg = M1*n1                                
+        LatticeList = np.concatenate((LatticeList, [flatlattice]))
+        Or = (np.abs(np.sum(flatlattice)))/(N*N)
+        if Or > 0.5:
+            Ord = 1
+        elif Or < 0.5:
+            Ord = 0
+        Order = np.concatenate((Order, [Ord]))                  
+        Mg = M*n                             
         MagList = np.concatenate((MagList, [Mg]))                   
         temp = T[tpoints]
         TempList = np.concatenate((TempList, [temp]))
@@ -137,3 +140,4 @@ for i in range(numberofconfigs):
 np.save("pottsconfigs.npy", LatticeList)
 np.save("pottsmaglabels.npy", MagList)
 np.save("pottsvtemplabels.npy", TempList)
+np.save("Order.npy", Order)
