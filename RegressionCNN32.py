@@ -7,7 +7,6 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten, Conv2D
 
 
-
 # SIZE OF SYSTEM
 N = 32                                                                      
 
@@ -54,16 +53,16 @@ model.add(Flatten())
 
 # DENSE LAYERS
 model.add(Dense(64, activation='relu'))
-model.add(Dense(16, activation='relu'))
+model.add(Dense(64, activation='relu'))
 
 # OUTPUT LAYER
 model.add(Dense(1, activation='linear'))
 
 # DISPLAY NETWORK ARCHITECTURE
 model.summary()
-
+optimizer = tf.keras.optimizers.RMSprop(0.001)
 # COMPILE MODEL
-model.compile(loss='mean_absolute_error', optimizer="sgd", metrics=['mean_absolute_error'])
+model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolute_error', 'mean_squared_error'])
 
 # TRAIN MODEL
 history = model.fit(x_train, y_train, batch_size=100, epochs=50, verbose=1, validation_data=(x_test, y_test))
@@ -86,11 +85,12 @@ xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 
 ypredict = model.predict(xpred)
+ypredict = ypredict.reshape(len(ypredict),)
 
 truelabels = np.array(np.load("predictlabels.npy"))
 ylabels = truelabels/3.5
 
-yerror = np.abs(ypredict-ylabels)
+yerror = ypredict-ylabels
 
 order = np.abs(np.sum([xpredict], axis=2))
 order = order.reshape(order.shape[1],)

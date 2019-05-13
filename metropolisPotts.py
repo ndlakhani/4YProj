@@ -37,27 +37,28 @@ def metropolis(lattice, beta):
     # MONTE CARLO VIA METROPOLIS
     for a in range(N):
         for b in range(N):
-            x = np.random.randint(0,N)                                                                  
-            # SELECT LATTICE POINT X-COORDINATE
+            x = np.random.randint(0,N)                                                                
+            # SELECT LATTICE POINT X-COORDINATE            
             y = np.random.randint(0,N)                                                                  
             # SELECT LATTICE POINT Y-COORDINATE
+            
             z = lattice[x, y]
             z_new = roll(z)
                                                                                        
             # GET OLD AND NEW Z VAL
             
             ESumBefore  = -(kroenecker(z,lattice[(x+1)%N,y]) + kroenecker(z,lattice[x,(y+1)%N]) + kroenecker(z,lattice[(x-1)%N,y]) + kroenecker(z,lattice[x,(y-1)%N]))
-            ESumAfter   = -(kroenecker(z_new,lattice[(x+1)%N,y]) + kroenecker(z_new,lattice[x,(y+1)%N]) + kroenecker(z_new,lattice[(x-1)%N,y]) + kroenecker(z_new,lattice[x,(y-1)%N]))     
-            dE = ESumAfter - ESumBefore                                                                             
+            ESumAfter   = -(kroenecker(z_new,lattice[(x+1)%N,y]) + kroenecker(z_new,lattice[x,(y+1)%N]) + kroenecker(z_new,lattice[(x-1)%N,y]) + kroenecker(z_new,lattice[x,(y-1)%N]))
+            
+            dE = ESumAfter - ESumBefore
+                                                                             
             # CALCULATE ENERGY CHANGE (dE)
             if dE < 0:                                
-                z = z_new                                                                                 
-                # ACCEPT FLIP IF dE < 0
+                z = z_new       # ACCEPT FLIP IF dE < 0                                                                                          
             elif rand() < np.exp(-dE*beta):
-                z = z_new                                                                                 
-                # ACCEPT FLIP WITH PROBABILITY OF e^(=dE/T)
-            lattice[x,y] = z                                                                            
-            # ASSIGN NEW LATTICE POINT VALUE
+                z = z_new       # ACCEPT FLIP WITH PROBABILITY OF e^(=dE/T)                                                                                             
+            lattice[x,y] = z    # ASSIGN NEW LATTICE POINT VALUE                                                                          
+            
     return lattice
 
 @jit
@@ -67,8 +68,7 @@ def latticeEnergy(lattice):
     for x in range(len(lattice)):                                                                      
          # CALCULATE OVER ENTIRE LATTICE - ALL LATTICE POINTS
         for y in range(len(lattice)):                                                                   
-            Z = lattice[x,y]
-            Z1 = lattice[(x+1)%N, y] + lattice[x,(y+1)%N] + lattice[(x-1)%N, y] + lattice[x,(y-1)%N]
+            Z = lattice[x,y]            
             Zkro = kroenecker(Z,lattice[(x+1)%N, y]) + kroenecker(Z,lattice[x,(y+1)%N]) + kroenecker(Z,lattice[(x-1)%N, y]) + kroenecker(Z,lattice[x,(y-1)%N])    
             E1 += -Zkro*Z 
             energy = E1                                                                                             
@@ -79,7 +79,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 400                                                                                       
+temppoints  = 1000                                                                                       
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH
@@ -102,7 +102,7 @@ LatticeList = [flatlattice]
 MagList = [0]
 TempList = [0]
 
-numberofconfigs = 100                                                                                  
+numberofconfigs = 1                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for i in range(numberofconfigs):
@@ -134,11 +134,11 @@ for i in range(numberofconfigs):
         LatticeList = np.concatenate((LatticeList, [flatlattice]))                  
         Mg = M1*n1                                
         MagList = np.concatenate((MagList, [Mg]))                   
-        temp = np.round(T[tpoints],1)
+        temp = T[tpoints]
         TempList = np.concatenate((TempList, [temp]))
         print("Recorded lattice configuration #", tpoints+1, " of ", temppoints, " in cycle #", i+1, " of ", numberofconfigs)
 
 
-np.save("configs.npy", LatticeList)
-np.save("maglabels.npy", MagList)
-np.save("templabels.npy", TempList)
+np.save("pottsconfigs.npy", LatticeList)
+np.save("pottsmaglabels.npy", MagList)
+np.save("pottsvtemplabels.npy", TempList)
