@@ -45,6 +45,8 @@ model = Sequential()
 
 # CONVOLUTION LAYERS
 model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
+model.add(Conv2D(3, kernel_size=(3, 3), activation='relu'))
 
 # DROPOUT AND FLATTEN
 
@@ -53,9 +55,10 @@ model.add(Flatten())
 # DENSE LAYERS
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
 
 # OUTPUT LAYER
-model.add(Dense(1, activation='linear'))
+model.add(Dense(1, activation='sigmoid'))
 
 # DISPLAY NETWORK ARCHITECTURE
 model.summary()
@@ -87,7 +90,7 @@ ypredict = model.predict(xpred)
 ypredict = ypredict.reshape(len(ypredict),)
 
 truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = truelabels/3.5
+ylabels = truelabels*2/3.5
 
 yerror = ypredict-ylabels
 
