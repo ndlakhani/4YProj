@@ -5,7 +5,7 @@ import numba
 from numba import jit, autojit, vectorize, double
 
 # Q STATES POTTS MODEL - SELECT # OF STATES
-q = 3
+q = 2
 
 @jit
 def kroenecker(x1, x2):
