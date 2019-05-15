@@ -21,3 +21,7 @@ pottsvtemplabels.npy
 pottsmaglabels.npy
 pottsconfigs.npy
 Order.npy
+pottsconfigs.npy
+pottsmaglabels.npy
+pottsvtemplabels.npy
+RegressionCNN16.py
