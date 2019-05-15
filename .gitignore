@@ -17,3 +17,7 @@ roll.py
 templabels.npy
 maglabels.npy
 configs.npy
+pottsvtemplabels.npy
+pottsmaglabels.npy
+pottsconfigs.npy
+Order.npy

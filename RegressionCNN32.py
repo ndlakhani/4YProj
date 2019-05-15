@@ -9,9 +9,6 @@ from keras.layers import Dense, Flatten, Conv2D
 
 # SIZE OF SYSTEM
 N = 32                                                                      
-MCStepE, MCStepM = 1024
-n = 1.0/(N*MCStepM*MCStepM)
-n2 = 1.0/(N*N*MCStepM*MCStepM)
 
 # LOAD LATTICE CONFIGURATIONS
 train_dataset = np.load("latticelist.npy")
@@ -47,7 +44,7 @@ x_test = test_x.reshape(test_x.shape[0],N,N,1)
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=latticeshape))
 
 # DROPOUT AND FLATTEN
 
