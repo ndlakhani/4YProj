@@ -62,7 +62,7 @@ model.add(Dense(1, activation='sigmoid'))
 
 # DISPLAY NETWORK ARCHITECTURE
 model.summary()
-optimizer = tf.keras.optimizers.RMSprop(0.001)
+
 # COMPILE MODEL
 model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolute_error', 'mean_squared_error'])
 
@@ -97,5 +97,4 @@ yerror = ypredict-ylabels
 order = np.abs(np.sum([xpredict], axis=2))
 order = order.reshape(order.shape[1],)
 order = order/1024
-plt.plot(ypredict,order,'x')
-
+plt.plot(ypredict*3.5,order,'x')
