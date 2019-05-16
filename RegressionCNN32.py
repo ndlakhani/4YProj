@@ -70,7 +70,9 @@ model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolut
 history = model.fit(x_train, y_train, batch_size=100, epochs=50, verbose=1, validation_data=(x_test, y_test))
 
 print(history.history.keys())
+
 # "Loss"
+
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 plt.title('model loss')
@@ -90,7 +92,7 @@ ypredict = model.predict(xpred)
 ypredict = ypredict.reshape(len(ypredict),)
 
 truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = truelabels*2/3.5
+ylabels = truelabels/3.5
 
 yerror = ypredict-ylabels
 

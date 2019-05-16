@@ -45,7 +45,7 @@ x_test = test_x.reshape(test_x.shape[0],N,N,1)
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(64, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=latticeshape))
 
 # DROPOUT AND FLATTEN
 
@@ -53,7 +53,7 @@ model.add(Flatten())
 
 # DENSE LAYERS
 model.add(Dense(64, activation='relu'))
-model.add(Dense(16, activation='relu'))
+model.add(Dense(64, activation='relu'))
 
 # OUTPUT LAYER
 model.add(Dense(1, activation='linear'))
@@ -62,7 +62,7 @@ model.add(Dense(1, activation='linear'))
 model.summary()
 
 # COMPILE MODEL
-model.compile(loss='mean_absolute_error', optimizer="sgd", metrics=['mean_absolute_error'])
+model.compile(loss='mean_squared_error', optimizer="sgd", metrics=['mean_absolute_error', 'mean_squared_error'])
 
 # TRAIN MODEL
 history = model.fit(x_train, y_train, batch_size=100, epochs=25, verbose=1, validation_data=(x_test, y_test))

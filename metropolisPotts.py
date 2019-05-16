@@ -77,7 +77,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 100                                                                                      
+temppoints  = 200                                                                                      
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH

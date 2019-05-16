@@ -48,21 +48,16 @@ y_test = keras.utils.to_categorical(test_y)
 model = Sequential()
 
 # CONVOLUTION LAYERS
-model.add(Conv2D(32, kernel_size=(2, 2), activation='relu', input_shape=latticeshape))
-model.add(Conv2D(64, (2, 2), activation='relu'))
+model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=latticeshape))
+model.add(Conv2D(32, (3, 3), activation='relu'))
+model.add(Conv2D(3, (3, 3), activation='relu'))
 
-# MAX POOL LAYER
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-# DROPOUT AND FLATTEN
-model.add(Dropout(0.2))
+# FLATTEN
 model.add(Flatten())
 
 # DENSE LAYERS
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.3))
 model.add(Dense(64, activation='relu'))
-model.add(Dropout(0.1))
+model.add(Dense(64, activation='relu'))
 
 # OUTPUT LOGIT LAYER
 model.add(Dense(36, activation='softmax'))

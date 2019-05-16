@@ -58,8 +58,9 @@ def latticeEnergy(lattice):
 def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
+
 # NUMBER OF POINTS IN TEMPERATURE RANGE
-temppoints  = 10                                                                                       
+temppoints  = 1000                                                                                       
 # LATTICE LENGTH
 N           = 32                                                                                        
 # NUMBER OF METROPOLIS RUNS FOR EQUILIBRIATION
@@ -77,8 +78,7 @@ MagList = [0]
 TempList = [0]
 
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
-numberofconfigs = 10                                                                                  
-
+numberofconfigs = 1                                                                                  
 
 for i in range(numberofconfigs):
     for tpoints in range(temppoints):                                                                   
