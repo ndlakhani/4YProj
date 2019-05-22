@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, Conv2D
-
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+from keras.utils import to_categorical
+from keras import regularizers
 
 # SIZE OF SYSTEM
 N = 32                                                                      
@@ -13,66 +14,66 @@ N = 32
 # LOAD LATTICE CONFIGURATIONS
 train_dataset = np.load("latticelist.npy")
 
-# LOAD MAGNETISATION LABELS (IF UNCOMMENTED)                     
-# maglabels = np.load("maglabels.txt")
-          
-# LOAD TEMPERATURE LABELS                                          
-label = np.array(np.load("templist.npy"))
+# LOAD LATTICE ORDER PARAMETERS                                      
+label = np.sum(train_dataset, axis = 1)
+label = np.abs(label/(N*N))
+label[label>=0.5] = 1
+label[label<0.5] = 0
+
 # TRACKING OUTPUT - DECLARE SUCCESSFUL IMPORT
 print("Loaded 2D Ising Lattice configurations for training")                
 
 test_dataset = np.array(np.load("testconfigs.npy"))
-tlabels = np.array(np.load("testtemplabels.npy"))
+tlabels = np.sum(test_dataset, axis = 1)
+tlabels = np.abs(tlabels/(N*N))
+tlabels[tlabels>=0.5] = 1
+tlabels[tlabels<0.5] = 0
 
 # TRACKING OUTPUT - DECLARE SUCCESSFUL IMPORT
 print("Loaded 2D Ising Lattice configurations for testing")                 
 
 
 x = train_dataset
-y_train = label/3.5
 
 test_x = test_dataset
-y_test = tlabels/3.5
 
 # PREPARING DATA: RESHAPE LATTICE TO N*N*1, COVERT LABELS TO CATEGORICAL
 
 latticeshape = (N, N, 1)
 x_train = x.reshape(x.shape[0], N, N, 1)
 x_test = test_x.reshape(test_x.shape[0],N,N,1)
+y_train = keras.utils.to_categorical(label)
+y_test = keras.utils.to_categorical(tlabels)
 
 # CREATE MODEL
 model = Sequential()
 
 # CONVOLUTION LAYERS
 model.add(Conv2D(64, kernel_size=(3, 3), activation='relu', input_shape=latticeshape))
-model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
-model.add(Conv2D(3, kernel_size=(3, 3), activation='relu'))
+model.add(Conv2D(32, (3, 3), activation='relu'))
+model.add(Conv2D(3, (3, 3), activation='relu'))
 
-# DROPOUT AND FLATTEN
-
+# FLATTEN
 model.add(Flatten())
 
 # DENSE LAYERS
 model.add(Dense(64, activation='relu'))
 model.add(Dense(64, activation='relu'))
-model.add(Dense(64, activation='relu'))
 
-# OUTPUT LAYER
-model.add(Dense(1, activation='sigmoid'))
+# OUTPUT LOGIT LAYER
+model.add(Dense(2, activation='softmax'))
 
 # DISPLAY NETWORK ARCHITECTURE
 model.summary()
 
 # COMPILE MODEL
-model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolute_percentage_error', 'mean_squared_error'])
+model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
 
 # TRAIN MODEL
-history = model.fit(x_train, y_train, batch_size=100, epochs=50, verbose=1, validation_data=(x_test, y_test))
+history = model.fit(x_train, y_train, batch_size=50, epochs=5, verbose=1, shuffle=True, validation_data=(x_test, y_test))
 
 print(history.history.keys())
-
 # "Loss"
-
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
 plt.title('model loss')
@@ -82,21 +83,23 @@ plt.legend(['train', 'validation'], loc='upper left')
 plt.show()
 
 score = model.evaluate(x_test, y_test, verbose=0)
-
-print('Test error:', score[0])
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
 xpredict = np.array(np.load("predictdata.npy"))
 xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 
-ypredict = model.predict(xpred)
-ypredict = ypredict.reshape(len(ypredict),)
+ypred = model.predict_classes(xpred)
+ypredict = ypred
 
-truelabels = np.array(np.load("predictlabels.npy"))
-ylabels = truelabels/3.5
+ylabels = np.sum(xpred, axis=1)
+ylabels = np.abs(ylabels/(N*N))
+ylabels [ylabels>=0.5] = 1
+ylabels[ylabels<0.5] = 0
 
-yerror = ypredict-ylabels
+yerror = np.abs(ypredict-ylabels)
 
 order = np.abs(np.sum([xpredict], axis=2))
 order = order.reshape(order.shape[1],)
 order = order/1024
-plt.plot(ypredict*3.5,order,'x')
+plt.plot(ypredict,order,'x')

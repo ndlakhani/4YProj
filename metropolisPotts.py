@@ -5,7 +5,7 @@ import numba
 from numba import jit, autojit, vectorize, double
 
 # Q STATES POTTS MODEL - SELECT # OF STATES
-q = 2
+q = 4
 
 @jit
 def kroenecker(x1, x2):
@@ -77,7 +77,7 @@ def latticeMagnetisation(lattice):
     magnetisation = np.sum(lattice)
     return magnetisation
 
-temppoints  = 200                                                                                      
+temppoints  = 500                                                                                      
 # NUMBER OF POINTS IN TEMPERATURE RANGE
 N           = 32                                                                                        
 # LATTICE LENGTH
@@ -137,7 +137,7 @@ for i in range(numberofconfigs):
         print("Recorded lattice configuration #", tpoints+1, " of ", temppoints, " in cycle #", i+1, " of ", numberofconfigs)
 
 
-np.save("pottsconfigs.npy", LatticeList)
-np.save("pottsmaglabels.npy", MagList)
-np.save("pottsvtemplabels.npy", TempList)
-np.save("Order.npy", Order)
+np.save("pottspredict4data.npy", LatticeList)
+np.save("pottspredict4maglabels.npy", MagList)
+np.save("pottspredict4templabels.npy", TempList)
+np.save("Orderpredict4.npy", Order)
