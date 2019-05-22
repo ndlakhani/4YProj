@@ -64,7 +64,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
 # COMPILE MODEL
-model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolute_percentage_error', 'mean_squared_error'])
+model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['mean_absolute_error', 'mean_squared_error'])
 
 # TRAIN MODEL
 history = model.fit(x_train, y_train, batch_size=100, epochs=50, verbose=1, validation_data=(x_test, y_test))

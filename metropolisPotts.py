@@ -5,7 +5,7 @@ import numba
 from numba import jit, autojit, vectorize, double
 
 # Q STATES POTTS MODEL - SELECT # OF STATES
-q = 4
+q = 5
 
 @jit
 def kroenecker(x1, x2):
@@ -85,7 +85,7 @@ equilibrium = 1024
 # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
 montecarlo  = 1024                                                                                      
 # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
-T           = np.linspace(1.50, 3.50, temppoints)/2
+T           = np.linspace(0.25, 1.50, temppoints)
 
 n          = 1.0/(montecarlo*N*N)
 
@@ -96,7 +96,7 @@ MagList = [0]
 TempList = [0]
 Order = [0]
 
-numberofconfigs = 1                                                                                  
+numberofconfigs = 100                                                                                  
 # NUMBER OF GENERATED ARRAYS PER TEMPERATURE POINT FOR TRAINING
 
 for i in range(numberofconfigs):
@@ -123,21 +123,11 @@ for i in range(numberofconfigs):
         flatlattice = np.ravel(lattice)                                                                 
         # SAVE LATTICE TO NUMPY ARRAY
         
-        LatticeList = np.concatenate((LatticeList, [flatlattice]))
-        Or = (np.abs(np.sum(flatlattice)))/(N*N)
-        if Or > 0.5:
-            Ord = 1
-        elif Or < 0.5:
-            Ord = 0
-        Order = np.concatenate((Order, [Ord]))                  
-        Mg = M*n                             
-        MagList = np.concatenate((MagList, [Mg]))                   
+        LatticeList = np.concatenate((LatticeList, [flatlattice]))                                     
         temp = T[tpoints]
         TempList = np.concatenate((TempList, [temp]))
         print("Recorded lattice configuration #", tpoints+1, " of ", temppoints, " in cycle #", i+1, " of ", numberofconfigs)
 
 
-np.save("pottspredict4data.npy", LatticeList)
-np.save("pottspredict4maglabels.npy", MagList)
-np.save("pottspredict4templabels.npy", TempList)
-np.save("Orderpredict4.npy", Order)
+np.save("potts5data.npy", LatticeList)
+np.save("potts5templabels.npy", TempList)
