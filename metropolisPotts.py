@@ -85,7 +85,7 @@ equilibrium = 1024
 # NUMBER OF METROPOLIS RUNS TO REACH EQUILIBRIUM
 montecarlo  = 1024                                                                                      
 # NUMBER OF METROPOLIS RUNS TO PERFORM CALCULATIONS
-T           = np.linspace(0.25, 1.50, temppoints)
+T           = np.linspace(0.50, 1.50, temppoints)
 
 n          = 1.0/(montecarlo*N*N)
 
