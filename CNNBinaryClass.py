@@ -92,14 +92,11 @@ xpred = xpredict.reshape(xpredict.shape[0], N, N, 1)
 ypred = model.predict_classes(xpred)
 ypredict = ypred
 
-ylabels = np.sum(xpred, axis=1)
-ylabels = np.abs(ylabels/(N*N))
-ylabels [ylabels>=0.5] = 1
-ylabels[ylabels<0.5] = 0
+truelabels = np.array(np.load("predictlabels.npy"))
+ylabels = truelabels
 
 yerror = np.abs(ypredict-ylabels)
 
-order = np.abs(np.sum([xpredict], axis=2))
-order = order.reshape(order.shape[1],)
-order = order/1024
-plt.plot(ypredict,order,'x')
+plt.plot(truelabels, ypredict,'x')
+plt.xlabel('Configuration Temperature')
+plt.ylabel('Phase')
